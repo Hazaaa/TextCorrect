@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextCorrect.UI", "TextCorrect\TextCorrect.UI.csproj", "{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextCorrect.Core", "TextCorrect.Core\TextCorrect.Core.csproj", "{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E74B36A-2CEE-477E-A467-A2991C9C2AD2}
+	EndGlobalSection
+EndGlobal
