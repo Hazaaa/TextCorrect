@@ -36,7 +36,7 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.btnChangeLanguage = new System.Windows.Forms.Button();
             this.gbxLanguage = new System.Windows.Forms.GroupBox();
-            this.btnCorrectText = new System.Windows.Forms.Button();
+            this.btnAnalyzeText = new System.Windows.Forms.Button();
             this.btnPreCorrection = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnToCyrillic = new System.Windows.Forms.Button();
@@ -114,7 +114,7 @@
             // gbxLanguage
             // 
             this.gbxLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.gbxLanguage.Controls.Add(this.btnCorrectText);
+            this.gbxLanguage.Controls.Add(this.btnAnalyzeText);
             this.gbxLanguage.Controls.Add(this.btnPreCorrection);
             this.gbxLanguage.Location = new System.Drawing.Point(616, 121);
             this.gbxLanguage.Name = "gbxLanguage";
@@ -123,16 +123,15 @@
             this.gbxLanguage.TabStop = false;
             this.gbxLanguage.Text = "Language:";
             // 
-            // btnCorrectText
+            // btnAnalyzeText
             // 
-            this.btnCorrectText.Location = new System.Drawing.Point(6, 60);
-            this.btnCorrectText.Name = "btnCorrectText";
-            this.btnCorrectText.Size = new System.Drawing.Size(119, 23);
-            this.btnCorrectText.TabIndex = 6;
-            this.btnCorrectText.Text = "✍ Correct Text";
-            this.toolTip.SetToolTip(this.btnCorrectText, "Removes unnecessary whitespace, special characters, sets first letters to up, ..." +
-        "");
-            this.btnCorrectText.UseVisualStyleBackColor = true;
+            this.btnAnalyzeText.Location = new System.Drawing.Point(6, 60);
+            this.btnAnalyzeText.Name = "btnAnalyzeText";
+            this.btnAnalyzeText.Size = new System.Drawing.Size(119, 23);
+            this.btnAnalyzeText.TabIndex = 6;
+            this.btnAnalyzeText.Text = "✍ Analyze Text";
+            this.btnAnalyzeText.UseVisualStyleBackColor = true;
+            this.btnAnalyzeText.Click += new System.EventHandler(this.btnAnalyzeText_Click);
             // 
             // btnPreCorrection
             // 
@@ -248,7 +247,7 @@
         private System.Windows.Forms.GroupBox gbxSpecialFunctions;
         private System.Windows.Forms.Button btnToLatin;
         private System.Windows.Forms.Button btnToCyrillic;
-        private System.Windows.Forms.Button btnCorrectText;
+        private System.Windows.Forms.Button btnAnalyzeText;
         private System.Windows.Forms.Button btnLoadTextFormFile;
         private System.Windows.Forms.OpenFileDialog ofdLoadFile;
         private System.Windows.Forms.Button btnSaveTextToFile;

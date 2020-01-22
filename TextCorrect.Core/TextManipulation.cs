@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace TextCorrect.Core
 {
@@ -170,6 +172,78 @@ namespace TextCorrect.Core
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Checks if word is valid in English dictionary via DatamuseAPI.
+        /// </summary>
+        /// <returns>Returns same word and list of suggestions for that word sorted by similarity.</returns>
+        public async Task<List<string>> CheckEnglishWord(string word)
+        {
+            List<string> result = new List<string>();
+
+            if (word == "")
+                return result;
+
+            string datamuseApi = "https://api.datamuse.com/";
+
+            try
+            {
+                using (var Client = new HttpClient())
+                {
+                    Client.BaseAddress = new Uri(datamuseApi);
+                    Client.DefaultRequestHeaders.Accept.Clear();
+                    Client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+                    HttpResponseMessage responce = await Client.GetAsync("sug?s=" + word);
+                    if (responce.IsSuccessStatusCode)
+                    {
+                        var jsonResult = await responce.Content.ReadAsStringAsync();
+
+                        JavaScriptSerializer serializer = new JavaScriptSerializer();
+
+                        var deserializedData = serializer.DeserializeObject(jsonResult);
+
+                        foreach (dynamic data in (dynamic) deserializedData)
+                        {
+                            foreach (KeyValuePair<string,object> item in (dynamic) data)
+                            {
+                                if (!(item.Value is int))
+                                    result.Add(item.Value.ToString());
+                            }
+                        }
+
+                        return result;
+                    }
+                    else
+                    {
+                        // If request fail return empty list
+                        return result;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return result;
+            }
+        }
+
+        /// <summary>
+        /// Removes all special characters from string leaving only letters.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public string RemoveSpecialCharacters(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
         }
     }
 }

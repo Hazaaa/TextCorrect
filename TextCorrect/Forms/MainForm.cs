@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TextCorrect.Core;
@@ -16,7 +17,6 @@ namespace TextCorrect
     public partial class MainForm : Form
     {
         private readonly TextManipulation textManipulation;
-
         public Language SelectedLanguage { get; set; }
 
         public MainForm()
@@ -135,5 +135,33 @@ namespace TextCorrect
         }
 
         #endregion
+
+        private async void btnAnalyzeText_Click(object sender, EventArgs e)
+        {
+            List<string> splittedText = rtbEnteredText.Text.Split(' ').Distinct().ToList();
+
+            if (SelectedLanguage == Language.English)
+            {
+                foreach (string word in splittedText)
+                {
+                    List<string> checkResult = await textManipulation.CheckEnglishWord(textManipulation.RemoveSpecialCharacters(word.ToLower()));
+
+                    if (!checkResult.Contains(word))
+                    {
+                        foreach (Match match in Regex.Matches(rtbEnteredText.Text, "\\b" + textManipulation.RemoveSpecialCharacters(word) + "\\b"))
+                        {
+                            rtbEnteredText.SelectionStart = match.Index;
+                            rtbEnteredText.SelectionLength = word.Length;
+                            rtbEnteredText.SelectionFont = new Font(rtbEnteredText.SelectionFont, FontStyle.Underline);
+                            rtbEnteredText.SelectionColor = Color.Red;
+                        }
+                    }
+                }
+            }
+            else
+            {
+
+            }
+        }
     }
 }
