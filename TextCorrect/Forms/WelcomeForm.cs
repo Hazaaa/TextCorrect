@@ -7,16 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TextCorrect.Core;
 
 namespace TextCorrect.Forms
 {
-
-    public enum Language
-    {
-        Serbian,
-        English
-    }
-
     public partial class WelcomeForm : Form
     {
         public WelcomeForm()
@@ -39,7 +33,7 @@ namespace TextCorrect.Forms
 
         private void pbxSerbian_Click(object sender, EventArgs e)
         {
-            ShowMainForm(Language.Serbian);
+            ShowMainForm(Language.Serbian_latin);
         }
 
         private void pbxEnglish_Click(object sender, EventArgs e)

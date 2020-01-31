@@ -30,7 +30,7 @@ namespace TextCorrect
         private void MainForm_Load(object sender, EventArgs e)
         {
             this.Text += " - " + SelectedLanguage;
-            if(SelectedLanguage == Language.Serbian)
+            if(SelectedLanguage == Language.Serbian_latin)
             {
                 gbxSpecialFunctions.Visible = true;
             }
@@ -115,12 +115,35 @@ namespace TextCorrect
         private void btnToCyrillic_Click(object sender, EventArgs e)
         {
             rtbEnteredText.Text = textManipulation.ConvertTextToCyrillic(rtbEnteredText.Text);
+            SelectedLanguage = Language.Serbian_cyrillic;
         }
 
         private void btnToLatin_Click(object sender, EventArgs e)
         {
             rtbEnteredText.Text = textManipulation.ConvertTextToLatin(rtbEnteredText.Text);
+            SelectedLanguage = Language.Serbian_latin;
         }
+
+        private void btnAnalyzeText_Click(object sender, EventArgs e)
+        {
+            List<string> splittedText = rtbEnteredText.Text.Split(' ').Distinct().Select(x => textManipulation.RemoveSpecialCharacters(x)).ToList();
+
+            foreach (string word in splittedText)
+            {
+                bool checkResult = textManipulation.CheckIfWordIsValidHunspell(SelectedLanguage, word.ToLower());
+
+                if (!checkResult)
+                {
+                    foreach (Match match in Regex.Matches(rtbEnteredText.Text, "\\b" + textManipulation.RemoveSpecialCharacters(word) + "\\b"))
+                    {
+                        rtbEnteredText.SelectionStart = match.Index;
+                        rtbEnteredText.SelectionLength = word.Length;
+                        rtbEnteredText.SelectionFont = new Font(rtbEnteredText.SelectionFont, FontStyle.Underline);
+                        rtbEnteredText.SelectionColor = Color.Red;
+                    }
+                }
+            }
+        } 
 
         #endregion
 
@@ -135,33 +158,5 @@ namespace TextCorrect
         }
 
         #endregion
-
-        private async void btnAnalyzeText_Click(object sender, EventArgs e)
-        {
-            List<string> splittedText = rtbEnteredText.Text.Split(' ').Distinct().ToList();
-
-            if (SelectedLanguage == Language.English)
-            {
-                foreach (string word in splittedText)
-                {
-                    List<string> checkResult = await textManipulation.CheckEnglishWord(textManipulation.RemoveSpecialCharacters(word.ToLower()));
-
-                    if (!checkResult.Contains(word))
-                    {
-                        foreach (Match match in Regex.Matches(rtbEnteredText.Text, "\\b" + textManipulation.RemoveSpecialCharacters(word) + "\\b"))
-                        {
-                            rtbEnteredText.SelectionStart = match.Index;
-                            rtbEnteredText.SelectionLength = word.Length;
-                            rtbEnteredText.SelectionFont = new Font(rtbEnteredText.SelectionFont, FontStyle.Underline);
-                            rtbEnteredText.SelectionColor = Color.Red;
-                        }
-                    }
-                }
-            }
-            else
-            {
-
-            }
-        }
     }
 }

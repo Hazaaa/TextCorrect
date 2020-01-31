@@ -59,7 +59,7 @@
             this.rtbEnteredText.BackColor = System.Drawing.Color.White;
             this.rtbEnteredText.Location = new System.Drawing.Point(6, 19);
             this.rtbEnteredText.Name = "rtbEnteredText";
-            this.rtbEnteredText.Size = new System.Drawing.Size(576, 377);
+            this.rtbEnteredText.Size = new System.Drawing.Size(576, 453);
             this.rtbEnteredText.TabIndex = 0;
             this.rtbEnteredText.Text = "";
             // 
@@ -73,15 +73,15 @@
             this.gbxText.Controls.Add(this.rtbEnteredText);
             this.gbxText.Location = new System.Drawing.Point(12, 12);
             this.gbxText.Name = "gbxText";
-            this.gbxText.Size = new System.Drawing.Size(588, 422);
+            this.gbxText.Size = new System.Drawing.Size(588, 503);
             this.gbxText.TabIndex = 2;
             this.gbxText.TabStop = false;
             this.gbxText.Text = "Text:";
             // 
             // btnCopyToClipboard
             // 
-            this.btnCopyToClipboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCopyToClipboard.Location = new System.Drawing.Point(82, 397);
+            this.btnCopyToClipboard.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnCopyToClipboard.Location = new System.Drawing.Point(81, 475);
             this.btnCopyToClipboard.Name = "btnCopyToClipboard";
             this.btnCopyToClipboard.Size = new System.Drawing.Size(106, 22);
             this.btnCopyToClipboard.TabIndex = 9;
@@ -91,8 +91,8 @@
             // 
             // btnClear
             // 
-            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(7, 397);
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnClear.Location = new System.Drawing.Point(6, 475);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(69, 22);
             this.btnClear.TabIndex = 8;
@@ -116,12 +116,12 @@
             this.gbxLanguage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbxLanguage.Controls.Add(this.btnAnalyzeText);
             this.gbxLanguage.Controls.Add(this.btnPreCorrection);
-            this.gbxLanguage.Location = new System.Drawing.Point(616, 121);
+            this.gbxLanguage.Location = new System.Drawing.Point(616, 112);
             this.gbxLanguage.Name = "gbxLanguage";
             this.gbxLanguage.Size = new System.Drawing.Size(131, 98);
             this.gbxLanguage.TabIndex = 4;
             this.gbxLanguage.TabStop = false;
-            this.gbxLanguage.Text = "Language:";
+            this.gbxLanguage.Text = "Analyze:";
             // 
             // btnAnalyzeText
             // 
@@ -173,7 +173,7 @@
             this.gbxSpecialFunctions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbxSpecialFunctions.Controls.Add(this.btnToLatin);
             this.gbxSpecialFunctions.Controls.Add(this.btnToCyrillic);
-            this.gbxSpecialFunctions.Location = new System.Drawing.Point(616, 231);
+            this.gbxSpecialFunctions.Location = new System.Drawing.Point(618, 219);
             this.gbxSpecialFunctions.Name = "gbxSpecialFunctions";
             this.gbxSpecialFunctions.Size = new System.Drawing.Size(131, 95);
             this.gbxSpecialFunctions.TabIndex = 5;
@@ -184,7 +184,7 @@
             // btnLoadTextFormFile
             // 
             this.btnLoadTextFormFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLoadTextFormFile.Location = new System.Drawing.Point(616, 51);
+            this.btnLoadTextFormFile.Location = new System.Drawing.Point(616, 48);
             this.btnLoadTextFormFile.Name = "btnLoadTextFormFile";
             this.btnLoadTextFormFile.Size = new System.Drawing.Size(131, 23);
             this.btnLoadTextFormFile.TabIndex = 6;
@@ -199,7 +199,7 @@
             // btnSaveTextToFile
             // 
             this.btnSaveTextToFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveTextToFile.Location = new System.Drawing.Point(616, 86);
+            this.btnSaveTextToFile.Location = new System.Drawing.Point(616, 80);
             this.btnSaveTextToFile.Name = "btnSaveTextToFile";
             this.btnSaveTextToFile.Size = new System.Drawing.Size(131, 23);
             this.btnSaveTextToFile.TabIndex = 7;
@@ -216,7 +216,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(761, 446);
+            this.ClientSize = new System.Drawing.Size(761, 527);
             this.Controls.Add(this.btnSaveTextToFile);
             this.Controls.Add(this.btnLoadTextFormFile);
             this.Controls.Add(this.gbxSpecialFunctions);

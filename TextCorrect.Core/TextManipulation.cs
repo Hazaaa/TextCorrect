@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NHunspell;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -12,6 +13,13 @@ namespace TextCorrect.Core
     {
         Cyrillic,
         Latin
+    }
+
+    public enum Language
+    {
+        Serbian_latin,
+        Serbian_cyrillic,
+        English
     }
 
     public class TextManipulation
@@ -178,7 +186,7 @@ namespace TextCorrect.Core
         /// Checks if word is valid in English dictionary via DatamuseAPI.
         /// </summary>
         /// <returns>Returns same word and list of suggestions for that word sorted by similarity.</returns>
-        public async Task<List<string>> CheckEnglishWord(string word)
+        public async Task<List<string>> CheckEnglishWordAPI(string word)
         {
             List<string> result = new List<string>();
 
@@ -244,6 +252,72 @@ namespace TextCorrect.Core
                 }
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Checks if word is valid in Hunspell dictionary for specific language.
+        /// </summary>
+        public bool CheckIfWordIsValidHunspell(Language language, string word)
+        {
+            switch (language)
+            {
+                case Language.Serbian_latin:
+                    {
+                        using (Hunspell hunspell = new Hunspell("Dictionaries/sr-Latn.aff", "Dictionaries/sr-Latn.dic"))
+                        {
+                            return hunspell.Spell(word);
+                        }
+                    }
+                case Language.Serbian_cyrillic:
+                    {
+                        using (Hunspell hunspell = new Hunspell("Dictionaries/sr.aff", "Dictionaries/sr.dic"))
+                        {
+                            return hunspell.Spell(word);
+                        }
+                    }
+                case Language.English:
+                    {
+                        using (Hunspell hunspell = new Hunspell("Dictionaries/en_US.aff", "Dictionaries/en_US.dic"))
+                        {
+                            return hunspell.Spell(word);
+                        }
+                    }
+                default:
+                    return false;
+            }
+        }
+
+        /// <summary>
+        /// Returns list of suggestions from Hunspell dictionary for specific word.
+        /// </summary>
+        public List<string> SuggestWordsForWordHunspell(Language language, string word)
+        {
+            switch (language)
+            {
+                case Language.Serbian_latin:
+                    {
+                        using (Hunspell hunspell = new Hunspell("Dictionaries/sr-Latn.aff", "Dictionaries/sr-Latn.dic"))
+                        {
+                            return hunspell.Suggest(word);
+                        }
+                    }
+                case Language.Serbian_cyrillic:
+                    {
+                        using (Hunspell hunspell = new Hunspell("Dictionaries/sr.aff", "Dictionaries/sr.dic"))
+                        {
+                            return hunspell.Suggest(word);
+                        }
+                    }
+                case Language.English:
+                    {
+                        using (Hunspell hunspell = new Hunspell("Dictionaries/en_US.aff", "Dictionaries/en_US.dic"))
+                        {
+                            return hunspell.Suggest(word);
+                        }
+                    }
+                default:
+                    return new List<string>();
+            }
         }
     }
 }
