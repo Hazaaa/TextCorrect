@@ -7,9 +7,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Forms;
+using System.Windows.Markup;
 using TextCorrect.Core;
 using TextCorrect.Forms;
 
@@ -60,7 +63,7 @@ namespace TextCorrect
         {
             if(EnteredText != "\r\n")
             {
-                if(MessageBox.Show("Are you sure you want to change language?", "Language change", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if(System.Windows.Forms.MessageBox.Show("Are you sure you want to change language?", "Language change", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     ShowWelcomeForm();
                 }
@@ -85,16 +88,41 @@ namespace TextCorrect
 
                 using (StreamReader sr = new StreamReader(path))
                 {
-                    if (EnteredText != "")
+                    if (EnteredText != "\r\n")
                     {
-                        if (MessageBox.Show("You have unsaved text. Are you sure you want to overwrite it?", "Overwrite", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                        if (System.Windows.Forms.MessageBox.Show("You have unsaved text. Are you sure you want to overwrite it?", "Overwrite", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
                             EnteredText = sr.ReadToEnd();
+
+                            if(SelectedLanguage != Language.English)
+                            {
+                                if(EnteredText.ToUpper().Contains("И"))
+                                {
+                                    SelectedLanguage = Language.Serbian_cyrillic;
+                                } else
+                                {
+                                    SelectedLanguage = Language.Serbian_latin;
+                                }
+                                SetSpellCheckDictionary();
+                            }
                         }
                     }
                     else
                     {
                         EnteredText = sr.ReadToEnd();
+
+                        if (SelectedLanguage != Language.English)
+                        {
+                            if (EnteredText.ToUpper().Contains("И"))
+                            {
+                                SelectedLanguage = Language.Serbian_cyrillic;
+                            }
+                            else
+                            {
+                                SelectedLanguage = Language.Serbian_latin;
+                            }
+                            SetSpellCheckDictionary();
+                        }
                     }
                 }
             }
@@ -117,7 +145,7 @@ namespace TextCorrect
         {
             if (EnteredText != "\r\n")
             {
-                if (MessageBox.Show("You have unsaved text. Are you sure you want to clear it?", "Clear", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (System.Windows.Forms.MessageBox.Show("You have unsaved text. Are you sure you want to clear it?", "Clear", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     rtbEnteredText.Document.Blocks.Clear();
                 }
@@ -126,7 +154,7 @@ namespace TextCorrect
 
         private void btnCopyToClipboard_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(EnteredText);
+            System.Windows.Clipboard.SetText(EnteredText);
         }
 
         private void btnOnlyFirstOccurrence_Click_1(object sender, EventArgs e)
@@ -213,11 +241,19 @@ namespace TextCorrect
 
             if (SelectedLanguage == Language.Serbian_cyrillic)
             {
+                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("sr-Cyrl");
+                rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
                 rtbEnteredText.SpellCheck.CustomDictionaries.Add(new Uri(@"pack://application:,,,/sr.lex"));
             }
             else if (SelectedLanguage == Language.Serbian_latin)
             {
+                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("sr-Latn");
+                rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
                 rtbEnteredText.SpellCheck.CustomDictionaries.Add(new Uri(@"pack://application:,,,/sr-latn.lex"));
+            } else
+            {
+                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-Us");
+                rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
             }
         }
 
