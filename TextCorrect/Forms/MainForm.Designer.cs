@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.gbxText = new System.Windows.Forms.GroupBox();
+            this.pbxSettings = new System.Windows.Forms.PictureBox();
             this.ehText = new System.Windows.Forms.Integration.ElementHost();
             this.btnCopyToClipboard = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
@@ -52,6 +53,7 @@
             this.txbReplaceWith = new System.Windows.Forms.TextBox();
             this.txbWordToReplace = new System.Windows.Forms.TextBox();
             this.gbxText.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbxSettings)).BeginInit();
             this.gbxSpecialFunctions.SuspendLayout();
             this.gbxWordReplace.SuspendLayout();
             this.SuspendLayout();
@@ -61,6 +63,7 @@
             this.gbxText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbxText.Controls.Add(this.pbxSettings);
             this.gbxText.Controls.Add(this.ehText);
             this.gbxText.Controls.Add(this.btnCopyToClipboard);
             this.gbxText.Controls.Add(this.btnClear);
@@ -70,6 +73,17 @@
             this.gbxText.TabIndex = 2;
             this.gbxText.TabStop = false;
             this.gbxText.Text = "Text:";
+            // 
+            // pbxSettings
+            // 
+            this.pbxSettings.Image = global::TextCorrect.Properties.Resources.icons8_settings_32px;
+            this.pbxSettings.Location = new System.Drawing.Point(546, 472);
+            this.pbxSettings.Name = "pbxSettings";
+            this.pbxSettings.Size = new System.Drawing.Size(33, 26);
+            this.pbxSettings.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbxSettings.TabIndex = 11;
+            this.pbxSettings.TabStop = false;
+            this.pbxSettings.Click += new System.EventHandler(this.pbxSettings_Click);
             // 
             // ehText
             // 
@@ -279,6 +293,7 @@
             this.Text = "TextCorrect";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.gbxText.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbxSettings)).EndInit();
             this.gbxSpecialFunctions.ResumeLayout(false);
             this.gbxWordReplace.ResumeLayout(false);
             this.gbxWordReplace.PerformLayout();
@@ -308,6 +323,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txbReplaceWith;
         private System.Windows.Forms.TextBox txbWordToReplace;
+        private System.Windows.Forms.PictureBox pbxSettings;
     }
 }
 

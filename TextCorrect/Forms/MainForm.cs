@@ -21,6 +21,7 @@ namespace TextCorrect
     public partial class MainForm : Form
     {
         private readonly TextManipulation textManipulation;
+        private PropertyForm pf;
 
         System.Windows.Controls.RichTextBox rtbEnteredText = new System.Windows.Controls.RichTextBox();
 
@@ -35,6 +36,22 @@ namespace TextCorrect
             } }
         
         public Language SelectedLanguage { get; set; }
+
+        public PropertyForm PropertyForm
+        {
+            get
+            {
+                if (pf == null || pf.IsDisposed)
+                {
+                    pf = new PropertyForm(rtbEnteredText);
+                    return pf;
+                }
+                else
+                {
+                    return pf;
+                }
+            }
+        }
 
         public MainForm()
         {
@@ -185,6 +202,11 @@ namespace TextCorrect
         private void RtbEnteredText_SelectionChanged(object sender, System.Windows.RoutedEventArgs e)
         {
             txbWordToReplace.Text = rtbEnteredText.Selection.Text.Trim();
+        }
+
+        private void pbxSettings_Click(object sender, EventArgs e)
+        {
+            PropertyForm.Show();
         }
 
         #endregion
