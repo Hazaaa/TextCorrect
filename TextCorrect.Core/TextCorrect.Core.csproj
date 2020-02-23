@@ -58,7 +58,7 @@
     <None Include="Dictionaries\sr-Latn.aff">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Dictionaries\sr-Latn.dic">
+    <None Include="Dictionaries\sr-latn.dic">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Dictionaries\sr.aff">

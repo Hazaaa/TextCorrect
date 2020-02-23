@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using TextCorrect.Core;
 using TextCorrect.Forms;
@@ -17,6 +18,19 @@ namespace TextCorrect
     public partial class MainForm : Form
     {
         private readonly TextManipulation textManipulation;
+
+        System.Windows.Controls.RichTextBox rtbEnteredText = new System.Windows.Controls.RichTextBox();
+
+        public string EnteredText {
+            get
+            {
+                return new TextRange(rtbEnteredText.Document.ContentStart, rtbEnteredText.Document.ContentEnd).Text;
+            }
+            set {
+                rtbEnteredText.Document.Blocks.Clear();
+                rtbEnteredText.AppendText(value);
+            } }
+        
         public Language SelectedLanguage { get; set; }
 
         public MainForm()
@@ -38,11 +52,13 @@ namespace TextCorrect
             {
                 gbxSpecialFunctions.Visible = false;
             }
+
+            SetWpfElementHost();
         }
 
         private void btnChangeLanguage_Click(object sender, EventArgs e)
         {
-            if(rtbEnteredText.Text != "")
+            if(EnteredText != "\r\n")
             {
                 if(MessageBox.Show("Are you sure you want to change language?", "Language change", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
@@ -57,7 +73,8 @@ namespace TextCorrect
 
         private void btnPreCorrection_Click(object sender, EventArgs e)
         {
-            rtbEnteredText.Text = textManipulation.PreCorrectText(rtbEnteredText.Text);
+            string text = textManipulation.PreCorrectText(EnteredText);
+            EnteredText = text;
         }
 
         private void btnLoadTextFormFile_Click(object sender, EventArgs e)
@@ -68,16 +85,16 @@ namespace TextCorrect
 
                 using (StreamReader sr = new StreamReader(path))
                 {
-                    if (rtbEnteredText.Text != "")
+                    if (EnteredText != "")
                     {
                         if (MessageBox.Show("You have unsaved text. Are you sure you want to overwrite it?", "Overwrite", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                         {
-                            rtbEnteredText.Text = sr.ReadToEnd();
+                            EnteredText = sr.ReadToEnd();
                         }
                     }
                     else
                     {
-                        rtbEnteredText.Text = sr.ReadToEnd();
+                        EnteredText = sr.ReadToEnd();
                     }
                 }
             }
@@ -91,63 +108,96 @@ namespace TextCorrect
 
                 using (StreamWriter sw = new StreamWriter(path))
                 {
-                    sw.Write(rtbEnteredText.Text);
+                    sw.Write(EnteredText);
                 }
             }
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-            if (rtbEnteredText.Text != "")
+            if (EnteredText != "\r\n")
             {
                 if (MessageBox.Show("You have unsaved text. Are you sure you want to clear it?", "Clear", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    rtbEnteredText.Clear();
+                    rtbEnteredText.Document.Blocks.Clear();
                 }
             }
         }
 
         private void btnCopyToClipboard_Click(object sender, EventArgs e)
         {
-            Clipboard.SetText(rtbEnteredText.Text);
+            Clipboard.SetText(EnteredText);
+        }
+
+        private void btnOnlyFirstOccurrence_Click_1(object sender, EventArgs e)
+        {
+            ReplaceWordInText(txbWordToReplace.Text, txbReplaceWith.Text, true);
+        }
+
+        private void btnAllOccurrences_Click_1(object sender, EventArgs e)
+        {
+            ReplaceWordInText(txbWordToReplace.Text, txbReplaceWith.Text, false);
         }
 
         private void btnToCyrillic_Click(object sender, EventArgs e)
         {
-            rtbEnteredText.Text = textManipulation.ConvertTextToCyrillic(rtbEnteredText.Text);
+            var cyrillicText = textManipulation.ConvertTextToCyrillic(EnteredText);
+            EnteredText = cyrillicText;
             SelectedLanguage = Language.Serbian_cyrillic;
+            SetSpellCheckDictionary();
         }
 
         private void btnToLatin_Click(object sender, EventArgs e)
         {
-            rtbEnteredText.Text = textManipulation.ConvertTextToLatin(rtbEnteredText.Text);
+            var latinText = textManipulation.ConvertTextToLatin(EnteredText);
+            EnteredText = latinText;
             SelectedLanguage = Language.Serbian_latin;
+            SetSpellCheckDictionary();
         }
-
-        private void btnAnalyzeText_Click(object sender, EventArgs e)
+        private void RtbEnteredText_SelectionChanged(object sender, System.Windows.RoutedEventArgs e)
         {
-            List<string> splittedText = rtbEnteredText.Text.Split(' ').Distinct().Select(x => textManipulation.RemoveSpecialCharacters(x)).ToList();
-
-            foreach (string word in splittedText)
-            {
-                bool checkResult = textManipulation.CheckIfWordIsValidHunspell(SelectedLanguage, word.ToLower());
-
-                if (!checkResult)
-                {
-                    foreach (Match match in Regex.Matches(rtbEnteredText.Text, "\\b" + textManipulation.RemoveSpecialCharacters(word) + "\\b"))
-                    {
-                        rtbEnteredText.SelectionStart = match.Index;
-                        rtbEnteredText.SelectionLength = word.Length;
-                        rtbEnteredText.SelectionFont = new Font(rtbEnteredText.SelectionFont, FontStyle.Underline);
-                        rtbEnteredText.SelectionColor = Color.Red;
-                    }
-                }
-            }
-        } 
+            txbWordToReplace.Text = rtbEnteredText.Selection.Text.Trim();
+        }
 
         #endregion
 
         #region Helpers
+
+        public void SetWpfElementHost()
+        {
+            // Adding wpf richtextbox to control
+            SetSpellCheckDictionary();
+            rtbEnteredText.SpellCheck.IsEnabled = true;
+            rtbEnteredText.AutoWordSelection = true;
+            rtbEnteredText.SelectionChanged += RtbEnteredText_SelectionChanged;
+
+            ehText.Child = rtbEnteredText;
+        }
+
+        public void ReplaceWordInText(string word, string replaceWith, bool firstOccurrence)
+        {
+            if (word == "" || replaceWith == "")
+                return;
+
+            if (firstOccurrence)
+            {
+                int indexWord = EnteredText.IndexOf(word);
+
+                if (indexWord != -1)
+                {
+                    var replacedText = EnteredText.Remove(indexWord, word.Length).Insert(indexWord, replaceWith);
+                    EnteredText = replacedText;
+                }
+            }
+            else
+            {
+                var replacedText = EnteredText.Replace(word, replaceWith);
+                EnteredText = replacedText;
+            }
+
+            txbReplaceWith.Text = "";
+            txbWordToReplace.Text = "";
+        }
 
         public void ShowWelcomeForm()
         {
@@ -155,6 +205,20 @@ namespace TextCorrect
             WelcomeForm wf = new WelcomeForm();
             wf.ShowDialog();
             this.Close();
+        }
+
+        public void SetSpellCheckDictionary()
+        {
+            rtbEnteredText.SpellCheck.CustomDictionaries.Clear();
+
+            if (SelectedLanguage == Language.Serbian_cyrillic)
+            {
+                rtbEnteredText.SpellCheck.CustomDictionaries.Add(new Uri(@"pack://application:,,,/sr.lex"));
+            }
+            else if (SelectedLanguage == Language.Serbian_latin)
+            {
+                rtbEnteredText.SpellCheck.CustomDictionaries.Add(new Uri(@"pack://application:,,,/sr-latn.lex"));
+            }
         }
 
         #endregion
