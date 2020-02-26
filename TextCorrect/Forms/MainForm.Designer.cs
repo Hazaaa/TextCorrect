@@ -52,6 +52,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txbReplaceWith = new System.Windows.Forms.TextBox();
             this.txbWordToReplace = new System.Windows.Forms.TextBox();
+            this.lblTextErrorIndicator = new System.Windows.Forms.Label();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.gbxText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxSettings)).BeginInit();
             this.gbxSpecialFunctions.SuspendLayout();
@@ -63,6 +65,7 @@
             this.gbxText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbxText.Controls.Add(this.lblTextErrorIndicator);
             this.gbxText.Controls.Add(this.pbxSettings);
             this.gbxText.Controls.Add(this.ehText);
             this.gbxText.Controls.Add(this.btnCopyToClipboard);
@@ -273,6 +276,21 @@
             this.txbWordToReplace.Size = new System.Drawing.Size(100, 20);
             this.txbWordToReplace.TabIndex = 10;
             // 
+            // lblTextErrorIndicator
+            // 
+            this.lblTextErrorIndicator.AutoSize = true;
+            this.lblTextErrorIndicator.Location = new System.Drawing.Point(193, 480);
+            this.lblTextErrorIndicator.Name = "lblTextErrorIndicator";
+            this.lblTextErrorIndicator.Size = new System.Drawing.Size(69, 13);
+            this.lblTextErrorIndicator.TabIndex = 11;
+            this.lblTextErrorIndicator.Text = "errorIndicator";
+            this.lblTextErrorIndicator.Visible = false;
+            // 
+            // timer
+            // 
+            this.timer.Interval = 3000;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -293,6 +311,7 @@
             this.Text = "TextCorrect";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.gbxText.ResumeLayout(false);
+            this.gbxText.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxSettings)).EndInit();
             this.gbxSpecialFunctions.ResumeLayout(false);
             this.gbxWordReplace.ResumeLayout(false);
@@ -324,6 +343,8 @@
         private System.Windows.Forms.TextBox txbReplaceWith;
         private System.Windows.Forms.TextBox txbWordToReplace;
         private System.Windows.Forms.PictureBox pbxSettings;
+        private System.Windows.Forms.Label lblTextErrorIndicator;
+        private System.Windows.Forms.Timer timer;
     }
 }
 

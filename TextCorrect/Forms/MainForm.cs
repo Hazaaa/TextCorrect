@@ -74,6 +74,8 @@ namespace TextCorrect
             }
 
             SetWpfElementHost();
+
+            timer.Start();
         }
 
         private void btnChangeLanguage_Click(object sender, EventArgs e)
@@ -120,8 +122,8 @@ namespace TextCorrect
                                 {
                                     SelectedLanguage = Language.Serbian_latin;
                                 }
-                                SetSpellCheckDictionary();
                             }
+                            SetSpellCheckDictionary();
                         }
                     }
                     else
@@ -138,8 +140,8 @@ namespace TextCorrect
                             {
                                 SelectedLanguage = Language.Serbian_latin;
                             }
-                            SetSpellCheckDictionary();
                         }
+                        SetSpellCheckDictionary();
                     }
                 }
             }
@@ -209,6 +211,27 @@ namespace TextCorrect
             PropertyForm.Show();
         }
 
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if (EnteredText != "\r\n" && rtbEnteredText.GetNextSpellingErrorPosition(rtbEnteredText.Document.ContentStart, LogicalDirection.Forward) != null)
+            {
+                lblTextErrorIndicator.Visible = true;
+                lblTextErrorIndicator.ForeColor = Color.Red;
+                lblTextErrorIndicator.Text = "X - There are spelling errors.";
+            }
+            else
+            {
+                lblTextErrorIndicator.Visible = true;
+                lblTextErrorIndicator.ForeColor = Color.Green;
+                lblTextErrorIndicator.Text = "✔ - No spelling errors.";
+            }
+        }
+
+        private void RtbEnteredText_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            SetSpellCheckDictionary();
+        }
+
         #endregion
 
         #region Helpers
@@ -216,12 +239,14 @@ namespace TextCorrect
         public void SetWpfElementHost()
         {
             // Adding wpf richtextbox to control
-            SetSpellCheckDictionary();
             rtbEnteredText.SpellCheck.IsEnabled = true;
             rtbEnteredText.AutoWordSelection = true;
-            rtbEnteredText.SelectionChanged += RtbEnteredText_SelectionChanged;
+            rtbEnteredText.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
 
+            rtbEnteredText.SelectionChanged += RtbEnteredText_SelectionChanged;
+            rtbEnteredText.MouseEnter += RtbEnteredText_MouseEnter;
             ehText.Child = rtbEnteredText;
+            
         }
 
         public void ReplaceWordInText(string word, string replaceWith, bool firstOccurrence)
@@ -263,19 +288,36 @@ namespace TextCorrect
 
             if (SelectedLanguage == Language.Serbian_cyrillic)
             {
-                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("sr-Cyrl");
+                var culture = System.Globalization.CultureInfo.GetCultureInfo("sr-Cyrl-RS");
+                Thread.CurrentThread.CurrentCulture = culture;
                 rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
+                var language = InputLanguage.FromCulture(culture);
+
+                if (InputLanguage.InstalledInputLanguages.IndexOf(language) >= 0)
+                    InputLanguage.CurrentInputLanguage = language;
+
                 rtbEnteredText.SpellCheck.CustomDictionaries.Add(new Uri(@"pack://application:,,,/sr.lex"));
             }
             else if (SelectedLanguage == Language.Serbian_latin)
             {
-                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("sr-Latn");
+                var culture = System.Globalization.CultureInfo.GetCultureInfo("sr-Latn-RS");
+                Thread.CurrentThread.CurrentCulture = culture;
                 rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
+                var language = InputLanguage.FromCulture(culture);
+
+                if (InputLanguage.InstalledInputLanguages.IndexOf(language) >= 0)
+                    InputLanguage.CurrentInputLanguage = language;
+
                 rtbEnteredText.SpellCheck.CustomDictionaries.Add(new Uri(@"pack://application:,,,/sr-latn.lex"));
             } else
             {
-                Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("en-Us");
+                var culture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
+                Thread.CurrentThread.CurrentCulture = culture;
                 rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
+                var language = InputLanguage.FromCulture(culture);
+
+                if (InputLanguage.InstalledInputLanguages.IndexOf(language) >= 0)
+                    InputLanguage.CurrentInputLanguage = language;
             }
         }
 

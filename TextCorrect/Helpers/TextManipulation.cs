@@ -24,6 +24,7 @@ namespace TextCorrect.Core
     {
         private readonly Dictionary<string, string> latinToCyrillicAlphabet = new Dictionary<string, string>();
         private readonly Dictionary<string, string> cyrillicToLatinAlphabet = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> specialCyrillicLetters = new Dictionary<string, string>();
 
         public TextManipulation(){}
 
@@ -96,7 +97,7 @@ namespace TextCorrect.Core
         /// </summary>
         public void PopulateDictionaries()
         {
-            if(latinToCyrillicAlphabet.Count == 0 && cyrillicToLatinAlphabet.Count == 0)
+            if(latinToCyrillicAlphabet.Count == 0 && cyrillicToLatinAlphabet.Count == 0 && specialCyrillicLetters.Count == 0)
             {
                 string[] latinUp = { "A", "B", "V", "G", "D", "Đ", "E", "Ž", "Z", "I", "J", "K", "L", "Lj", "M", "N", "Nj", "O", "P", "R", "S", "T", "Ć", "U", "F", "H", "C", "Č", "Dž", "Š" };
                 string[] latinLow = latinUp.Select(x => x.ToLower()).ToArray();
@@ -112,6 +113,18 @@ namespace TextCorrect.Core
                     cyrillicToLatinAlphabet.Add(cyrillicUp[i], latinUp[i]);
                     cyrillicToLatinAlphabet.Add(cyrillicLow[i], latinLow[i]);
                 }
+
+                // Adding special letters for cyrillic conversion
+                specialCyrillicLetters.Add("lj", "љ");
+                specialCyrillicLetters.Add("Lj", "Љ");
+                specialCyrillicLetters.Add("nj", "њ");
+                specialCyrillicLetters.Add("Nj", "Њ");
+                specialCyrillicLetters.Add("dj", "ђ");
+                specialCyrillicLetters.Add("Dj", "Ђ");
+                specialCyrillicLetters.Add("dz", "џ");
+                specialCyrillicLetters.Add("Dz", "Џ");
+                specialCyrillicLetters.Add("dž", "џ");
+                specialCyrillicLetters.Add("Dž", "Џ");
             }
         }
 
@@ -125,6 +138,11 @@ namespace TextCorrect.Core
 
             PopulateDictionaries();
             string result = text;
+
+            foreach (var specialLetter in specialCyrillicLetters)
+            {
+                result = result.Replace(specialLetter.Key, specialLetter.Value);
+            }
 
             foreach (var letter in latinToCyrillicAlphabet)
             {
@@ -148,6 +166,11 @@ namespace TextCorrect.Core
             foreach (var letter in cyrillicToLatinAlphabet)
             {
                 result = result.Replace(letter.Key, letter.Value);
+            }
+
+            foreach (var specialLetter in specialCyrillicLetters)
+            {
+                result = result.Replace(specialLetter.Value, specialLetter.Key);
             }
 
             return result;
