@@ -168,7 +168,7 @@
             this.gbxSpecialFunctions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbxSpecialFunctions.Controls.Add(this.btnToLatin);
             this.gbxSpecialFunctions.Controls.Add(this.btnToCyrillic);
-            this.gbxSpecialFunctions.Location = new System.Drawing.Point(618, 345);
+            this.gbxSpecialFunctions.Location = new System.Drawing.Point(616, 344);
             this.gbxSpecialFunctions.Name = "gbxSpecialFunctions";
             this.gbxSpecialFunctions.Size = new System.Drawing.Size(131, 95);
             this.gbxSpecialFunctions.TabIndex = 5;

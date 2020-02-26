@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextCorrect.UI", "TextCorrect\TextCorrect.UI.csproj", "{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextCorrect.Core", "TextCorrect.Core\TextCorrect.Core.csproj", "{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7731AAF3-BE8A-40C0-B3DF-A2761BB2D7B0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA5D9B75-9DC1-45B9-8DFB-882E56FF77A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

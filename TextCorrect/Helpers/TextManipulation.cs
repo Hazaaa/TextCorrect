@@ -1,11 +1,9 @@
-﻿using NHunspell;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Script.Serialization;
 
 namespace TextCorrect.Core
 {
@@ -118,33 +116,6 @@ namespace TextCorrect.Core
         }
 
         /// <summary>
-        /// Searches specific letter in dictionaries and returns its translation.
-        /// </summary>
-        public string ConvertLetterToCyrillicOrLatin(string letter, Typography translateTo)
-        {
-            string translatedLetter;
-            bool success;
-
-            if (translateTo == Typography.Cyrillic)
-            {
-                success = cyrillicToLatinAlphabet.TryGetValue(letter, out translatedLetter);
-            }
-            else
-            {
-                success = latinToCyrillicAlphabet.TryGetValue(letter, out translatedLetter);
-            }
-
-            if (success)
-            {
-                return translatedLetter;
-            }
-            else
-            {
-                return letter;
-            }
-        }
-
-        /// <summary>
         /// Returns text translated from latin to cyrillic.
         /// </summary>
         public string ConvertTextToCyrillic(string text)
@@ -183,60 +154,6 @@ namespace TextCorrect.Core
         }
 
         /// <summary>
-        /// Checks if word is valid in English dictionary via DatamuseAPI.
-        /// </summary>
-        /// <returns>Returns same word and list of suggestions for that word sorted by similarity.</returns>
-        public async Task<List<string>> CheckEnglishWordAPI(string word)
-        {
-            List<string> result = new List<string>();
-
-            if (word == "")
-                return result;
-
-            string datamuseApi = "https://api.datamuse.com/";
-
-            try
-            {
-                using (var Client = new HttpClient())
-                {
-                    Client.BaseAddress = new Uri(datamuseApi);
-                    Client.DefaultRequestHeaders.Accept.Clear();
-                    Client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-
-                    HttpResponseMessage responce = await Client.GetAsync("sug?s=" + word);
-                    if (responce.IsSuccessStatusCode)
-                    {
-                        var jsonResult = await responce.Content.ReadAsStringAsync();
-
-                        JavaScriptSerializer serializer = new JavaScriptSerializer();
-
-                        var deserializedData = serializer.DeserializeObject(jsonResult);
-
-                        foreach (dynamic data in (dynamic) deserializedData)
-                        {
-                            foreach (KeyValuePair<string,object> item in (dynamic) data)
-                            {
-                                if (!(item.Value is int))
-                                    result.Add(item.Value.ToString());
-                            }
-                        }
-
-                        return result;
-                    }
-                    else
-                    {
-                        // If request fail return empty list
-                        return result;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return result;
-            }
-        }
-
-        /// <summary>
         /// Removes all special characters from string leaving only letters.
         /// </summary>
         /// <param name="str"></param>
@@ -252,72 +169,6 @@ namespace TextCorrect.Core
                 }
             }
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// Checks if word is valid in Hunspell dictionary for specific language.
-        /// </summary>
-        public bool CheckIfWordIsValidHunspell(Language language, string word)
-        {
-            switch (language)
-            {
-                case Language.Serbian_latin:
-                    {
-                        using (Hunspell hunspell = new Hunspell("Dictionaries/sr-Latn.aff", "Dictionaries/sr-Latn.dic"))
-                        {
-                            return hunspell.Spell(word);
-                        }
-                    }
-                case Language.Serbian_cyrillic:
-                    {
-                        using (Hunspell hunspell = new Hunspell("Dictionaries/sr.aff", "Dictionaries/sr.dic"))
-                        {
-                            return hunspell.Spell(word);
-                        }
-                    }
-                case Language.English:
-                    {
-                        using (Hunspell hunspell = new Hunspell("Dictionaries/en_US.aff", "Dictionaries/en_US.dic"))
-                        {
-                            return hunspell.Spell(word);
-                        }
-                    }
-                default:
-                    return false;
-            }
-        }
-
-        /// <summary>
-        /// Returns list of suggestions from Hunspell dictionary for specific word.
-        /// </summary>
-        public List<string> SuggestWordsForWordHunspell(Language language, string word)
-        {
-            switch (language)
-            {
-                case Language.Serbian_latin:
-                    {
-                        using (Hunspell hunspell = new Hunspell("Dictionaries/sr-Latn.aff", "Dictionaries/sr-Latn.dic"))
-                        {
-                            return hunspell.Suggest(word);
-                        }
-                    }
-                case Language.Serbian_cyrillic:
-                    {
-                        using (Hunspell hunspell = new Hunspell("Dictionaries/sr.aff", "Dictionaries/sr.dic"))
-                        {
-                            return hunspell.Suggest(word);
-                        }
-                    }
-                case Language.English:
-                    {
-                        using (Hunspell hunspell = new Hunspell("Dictionaries/en_US.aff", "Dictionaries/en_US.dic"))
-                        {
-                            return hunspell.Suggest(word);
-                        }
-                    }
-                default:
-                    return new List<string>();
-            }
         }
     }
 }
