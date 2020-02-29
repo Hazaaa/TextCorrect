@@ -20,23 +20,27 @@ namespace TextCorrect
 {
     public partial class MainForm : Form
     {
+        #region Properties
+
         private readonly TextManipulation textManipulation;
-        private PropertyForm pf;
 
         System.Windows.Controls.RichTextBox rtbEnteredText = new System.Windows.Controls.RichTextBox();
 
-        public string EnteredText {
+        public Language SelectedLanguage { get; set; }
+        public string EnteredText
+        {
             get
             {
                 return new TextRange(rtbEnteredText.Document.ContentStart, rtbEnteredText.Document.ContentEnd).Text;
             }
-            set {
+            set
+            {
                 rtbEnteredText.Document.Blocks.Clear();
                 rtbEnteredText.AppendText(value);
-            } }
-        
-        public Language SelectedLanguage { get; set; }
+            }
+        }
 
+        private PropertyForm pf;
         public PropertyForm PropertyForm
         {
             get
@@ -52,6 +56,8 @@ namespace TextCorrect
                 }
             }
         }
+
+        #endregion
 
         public MainForm()
         {
@@ -74,7 +80,7 @@ namespace TextCorrect
             }
 
             SetWpfElementHost();
-
+            SetSpellCheckDictionary();
             timer.Start();
         }
 
@@ -227,9 +233,12 @@ namespace TextCorrect
             }
         }
 
-        private void RtbEnteredText_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        private void RtbEnteredText_GotFocus(object sender, RoutedEventArgs e)
         {
-            SetSpellCheckDictionary();
+            if (!CheckCurrentLanguageOfRichTextBox())
+            {
+                SetSpellCheckDictionary();
+            }
         }
 
         #endregion
@@ -244,9 +253,8 @@ namespace TextCorrect
             rtbEnteredText.VerticalScrollBarVisibility = System.Windows.Controls.ScrollBarVisibility.Auto;
 
             rtbEnteredText.SelectionChanged += RtbEnteredText_SelectionChanged;
-            rtbEnteredText.MouseEnter += RtbEnteredText_MouseEnter;
+            rtbEnteredText.GotFocus += RtbEnteredText_GotFocus;
             ehText.Child = rtbEnteredText;
-            
         }
 
         public void ReplaceWordInText(string word, string replaceWith, bool firstOccurrence)
@@ -288,37 +296,39 @@ namespace TextCorrect
 
             if (SelectedLanguage == Language.Serbian_cyrillic)
             {
-                var culture = System.Globalization.CultureInfo.GetCultureInfo("sr-Cyrl-RS");
-                Thread.CurrentThread.CurrentCulture = culture;
-                rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
-                var language = InputLanguage.FromCulture(culture);
-
-                if (InputLanguage.InstalledInputLanguages.IndexOf(language) >= 0)
-                    InputLanguage.CurrentInputLanguage = language;
-
+                SetInputAndRichTextBoxLanguage("sr-Cyrl-RS");
                 rtbEnteredText.SpellCheck.CustomDictionaries.Add(new Uri(@"pack://application:,,,/sr.lex"));
             }
             else if (SelectedLanguage == Language.Serbian_latin)
             {
-                var culture = System.Globalization.CultureInfo.GetCultureInfo("sr-Latn-RS");
-                Thread.CurrentThread.CurrentCulture = culture;
-                rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
-                var language = InputLanguage.FromCulture(culture);
-
-                if (InputLanguage.InstalledInputLanguages.IndexOf(language) >= 0)
-                    InputLanguage.CurrentInputLanguage = language;
-
+                SetInputAndRichTextBoxLanguage("sr-Latn-RS");
                 rtbEnteredText.SpellCheck.CustomDictionaries.Add(new Uri(@"pack://application:,,,/sr-latn.lex"));
             } else
             {
-                var culture = System.Globalization.CultureInfo.GetCultureInfo("en-US");
-                Thread.CurrentThread.CurrentCulture = culture;
-                rtbEnteredText.Language = XmlLanguage.GetLanguage(Thread.CurrentThread.CurrentCulture.Name);
-                var language = InputLanguage.FromCulture(culture);
-
-                if (InputLanguage.InstalledInputLanguages.IndexOf(language) >= 0)
-                    InputLanguage.CurrentInputLanguage = language;
+                SetInputAndRichTextBoxLanguage("en-US");
             }
+        }
+
+        public void SetInputAndRichTextBoxLanguage(string languageCode)
+        {
+            var culture = System.Globalization.CultureInfo.GetCultureInfo(languageCode);
+            Thread.CurrentThread.CurrentCulture = culture;
+            rtbEnteredText.Language = XmlLanguage.GetLanguage(culture.Name);
+            var language = InputLanguage.FromCulture(culture);
+
+            if (InputLanguage.InstalledInputLanguages.IndexOf(language) >= 0 && InputLanguage.CurrentInputLanguage != language)
+                InputLanguage.CurrentInputLanguage = language;
+        }
+
+        public bool CheckCurrentLanguageOfRichTextBox()
+        {
+            var culture = Thread.CurrentThread.CurrentCulture;
+            var language = InputLanguage.FromCulture(culture);
+
+            if (rtbEnteredText.Language == XmlLanguage.GetLanguage(culture.Name) && InputLanguage.CurrentInputLanguage.LayoutName == language.LayoutName)
+                return true;
+            else
+                return false;
         }
 
         #endregion
