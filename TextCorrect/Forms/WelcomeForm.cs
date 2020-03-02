@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TextCorrect.Core;
@@ -33,6 +34,19 @@ namespace TextCorrect.Forms
 
         private void pbxSerbian_Click(object sender, EventArgs e)
         {
+            string[] languages = { "sr-Cyrl-RS", "sr-Latn-RS" };
+
+            foreach (string languageName in languages)
+            {
+                var culture = System.Globalization.CultureInfo.GetCultureInfo(languageName);
+                var language = InputLanguage.FromCulture(culture);
+
+                if (InputLanguage.InstalledInputLanguages.IndexOf(language) < 0)
+                {
+                    MessageBox.Show("Serbian language pack is missing.\nTry installing Serbian Latin and Cyrillic in your Windows preferences and restart application.", "Language pack missing.", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
+                }
+            }
             ShowMainForm(Language.Serbian_latin);
         }
 
