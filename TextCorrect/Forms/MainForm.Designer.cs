@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.gbxText = new System.Windows.Forms.GroupBox();
+            this.lblTextErrorIndicator = new System.Windows.Forms.Label();
             this.pbxSettings = new System.Windows.Forms.PictureBox();
             this.ehText = new System.Windows.Forms.Integration.ElementHost();
             this.btnCopyToClipboard = new System.Windows.Forms.Button();
@@ -52,7 +53,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txbReplaceWith = new System.Windows.Forms.TextBox();
             this.txbWordToReplace = new System.Windows.Forms.TextBox();
-            this.lblTextErrorIndicator = new System.Windows.Forms.Label();
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.gbxText.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbxSettings)).BeginInit();
@@ -77,8 +77,20 @@
             this.gbxText.TabStop = false;
             this.gbxText.Text = "Text:";
             // 
+            // lblTextErrorIndicator
+            // 
+            this.lblTextErrorIndicator.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblTextErrorIndicator.AutoSize = true;
+            this.lblTextErrorIndicator.Location = new System.Drawing.Point(193, 480);
+            this.lblTextErrorIndicator.Name = "lblTextErrorIndicator";
+            this.lblTextErrorIndicator.Size = new System.Drawing.Size(69, 13);
+            this.lblTextErrorIndicator.TabIndex = 11;
+            this.lblTextErrorIndicator.Text = "errorIndicator";
+            this.lblTextErrorIndicator.Visible = false;
+            // 
             // pbxSettings
             // 
+            this.pbxSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pbxSettings.Image = global::TextCorrect.Properties.Resources.icons8_settings_32px;
             this.pbxSettings.Location = new System.Drawing.Point(546, 472);
             this.pbxSettings.Name = "pbxSettings";
@@ -90,6 +102,9 @@
             // 
             // ehText
             // 
+            this.ehText.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.ehText.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.ehText.Location = new System.Drawing.Point(6, 19);
             this.ehText.Name = "ehText";
@@ -127,17 +142,18 @@
             this.btnChangeLanguage.Name = "btnChangeLanguage";
             this.btnChangeLanguage.Size = new System.Drawing.Size(131, 23);
             this.btnChangeLanguage.TabIndex = 3;
-            this.btnChangeLanguage.Text = "🌍 Change Language";
+            this.btnChangeLanguage.Text = "Change Language";
             this.btnChangeLanguage.UseVisualStyleBackColor = true;
             this.btnChangeLanguage.Click += new System.EventHandler(this.btnChangeLanguage_Click);
             // 
             // btnPreCorrection
             // 
+            this.btnPreCorrection.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPreCorrection.Location = new System.Drawing.Point(616, 124);
             this.btnPreCorrection.Name = "btnPreCorrection";
             this.btnPreCorrection.Size = new System.Drawing.Size(131, 23);
             this.btnPreCorrection.TabIndex = 5;
-            this.btnPreCorrection.Text = "✔ Text Correction";
+            this.btnPreCorrection.Text = "Text Correction";
             this.toolTip.SetToolTip(this.btnPreCorrection, "Removes unnecessary whitespace, special characters, capitalize first letter, ...");
             this.btnPreCorrection.UseVisualStyleBackColor = true;
             this.btnPreCorrection.Click += new System.EventHandler(this.btnPreCorrection_Click);
@@ -186,7 +202,7 @@
             this.btnLoadTextFormFile.Name = "btnLoadTextFormFile";
             this.btnLoadTextFormFile.Size = new System.Drawing.Size(131, 23);
             this.btnLoadTextFormFile.TabIndex = 6;
-            this.btnLoadTextFormFile.Text = "📁 Load Text From File";
+            this.btnLoadTextFormFile.Text = "Load Text From File";
             this.btnLoadTextFormFile.UseVisualStyleBackColor = true;
             this.btnLoadTextFormFile.Click += new System.EventHandler(this.btnLoadTextFormFile_Click);
             // 
@@ -201,7 +217,7 @@
             this.btnSaveTextToFile.Name = "btnSaveTextToFile";
             this.btnSaveTextToFile.Size = new System.Drawing.Size(131, 23);
             this.btnSaveTextToFile.TabIndex = 7;
-            this.btnSaveTextToFile.Text = "📂 Save Text To File";
+            this.btnSaveTextToFile.Text = "Save Text To File";
             this.btnSaveTextToFile.UseVisualStyleBackColor = true;
             this.btnSaveTextToFile.Click += new System.EventHandler(this.btnSaveTextToFile_Click);
             // 
@@ -211,6 +227,7 @@
             // 
             // gbxWordReplace
             // 
+            this.gbxWordReplace.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gbxWordReplace.Controls.Add(this.btnAllOccurrences);
             this.gbxWordReplace.Controls.Add(this.btnOnlyFirstOccurrence);
             this.gbxWordReplace.Controls.Add(this.label2);
@@ -276,16 +293,6 @@
             this.txbWordToReplace.Size = new System.Drawing.Size(100, 20);
             this.txbWordToReplace.TabIndex = 10;
             // 
-            // lblTextErrorIndicator
-            // 
-            this.lblTextErrorIndicator.AutoSize = true;
-            this.lblTextErrorIndicator.Location = new System.Drawing.Point(193, 480);
-            this.lblTextErrorIndicator.Name = "lblTextErrorIndicator";
-            this.lblTextErrorIndicator.Size = new System.Drawing.Size(69, 13);
-            this.lblTextErrorIndicator.TabIndex = 11;
-            this.lblTextErrorIndicator.Text = "errorIndicator";
-            this.lblTextErrorIndicator.Visible = false;
-            // 
             // timer
             // 
             this.timer.Interval = 3000;
@@ -305,7 +312,7 @@
             this.Controls.Add(this.btnChangeLanguage);
             this.Controls.Add(this.gbxText);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(400, 485);
+            this.MinimumSize = new System.Drawing.Size(777, 566);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TextCorrect";
